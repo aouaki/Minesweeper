@@ -1,5 +1,6 @@
 package controllers {
 	import events.NavigationEvent;
+	import events.GameEvent;
 	import models.Grid;
 	import views.GameView;
 	import views.HomeView;
@@ -38,7 +39,9 @@ package controllers {
 				this.removeChild(homeScreen);
 			}
 			
-			grid = new Grid(20, 20, 10);
+			this.addEventListener(GameEvent.NODE_EVENT, onNodeEvent)
+			
+			grid = new Grid(20, 15, 25);
 			gameScreen = new GameView(grid);
 			this.addChild(gameScreen);
 			
@@ -46,10 +49,20 @@ package controllers {
 		
 		private function onChangeScreen(event:NavigationEvent):void
 		{
-			switch (event.params.id)
+			switch (event._params.id)
 			{
 				case "play":
 					newGame();
+					break;
+			}
+		}
+		
+		private function onNodeEvent(event:GameEvent):void
+		{
+			switch (event._params.id)
+			{
+				case "click":
+					trace("Node Clicked");
 					break;
 			}
 		}
