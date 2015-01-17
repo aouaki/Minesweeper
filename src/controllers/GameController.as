@@ -1,19 +1,21 @@
-package
-{
+package controllers {
 	import events.NavigationEvent;
-	import screens.GameView;
-	import screens.HomeView;
+	import models.Grid;
+	import views.GameView;
+	import views.HomeView;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
 	import feathers.themes.MinimalDesktopTheme;
 
-	public class Game extends Sprite 
+	public class GameController extends Sprite 
 	{
 		private var gameScreen:GameView;
 		private var homeScreen:HomeView;
-		public function Game() 
+		private var grid:Grid;
+		
+		public function GameController() 
 		{
 			super();
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -24,8 +26,6 @@ package
 			new MinimalDesktopTheme();
 			trace("Game initialized");
 			this.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
-			gameScreen = new GameView;
-			this.addChild(gameScreen);
 			
 			homeScreen = new HomeView();
 			this.addChild(homeScreen);
@@ -38,7 +38,8 @@ package
 				this.removeChild(homeScreen);
 			}
 			
-			gameScreen = new GameView();
+			grid = new Grid(20, 20, 10);
+			gameScreen = new GameView(grid);
 			this.addChild(gameScreen);
 			
 		}

@@ -1,16 +1,19 @@
-package screens
-{
-	import feathers.controls.Button;
-	
+package views {
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
+
+	import feathers.controls.Button;
 	
-	public class Home extends Sprite 
+	import events.NavigationEvent;
+
+	public class HomeView extends Sprite 
 	{
 		
-		public function Home() 
+		private var newGameBtn:Button;
+
+		public function HomeView() 
 		{
 			super();
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -21,10 +24,10 @@ package screens
 		{
 			trace("Home screen initialized");
 			
-			drawScreen();
+			drawHomeScreen();
 		}
 		
-		private function drawScreen():void
+		private function drawHomeScreen():void
 		// Draws home screen (Title + New Game btn)
 		{
 			var background:Image = new Image(Assets.getTexture("HomeBg"));
@@ -34,7 +37,17 @@ package screens
 			this.addChild(homeTitle);
 			
 			var newGameBtn:Button = new Button();
+			newGameBtn.label = "Start new game";
 			this.addChild(newGameBtn);
+			
+			newGameBtn.addEventListener(Event.TRIGGERED, onNewGameBtnClick);
+
+		}
+		
+		private function onNewGameBtnClick(event:Event):void
+		{
+			trace("newGameBtn clicked");
+			this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, {id: "play"})); 
 		}
 	}
 
