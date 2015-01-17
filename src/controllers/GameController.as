@@ -1,10 +1,14 @@
 package controllers {
     import events.NavigationEvent;
     import events.GameEvent;
+    import feathers.controls.Button;
+    import feathers.core.PopUpManager;
     import models.Grid;
+    import starling.display.DisplayObject;
+    import ui.NodeButton;
     import views.GameView;
     import views.HomeView;
-    import ui.NodeButton;
+    import views.GameOverPopup;
     
     import starling.display.Sprite;
     import starling.events.Event;
@@ -16,6 +20,8 @@ package controllers {
         private var gameScreen:GameView;
         private var homeScreen:HomeView;
         private var grid:Grid;
+        private var popup:DisplayObject;
+        
         
         public function GameController() 
         {
@@ -35,22 +41,36 @@ package controllers {
         
         private function newGame():void
         {
+            trace("New Game");
             if (this.homeScreen != null)
             {
                 this.removeChild(homeScreen);
             }
             
-            this.addEventListener(GameEvent.NODE_EVENT, onNodeEvent)
+            if (this.gameScreen != null)
+            {
+                this.removeChild(gameScreen);
+            }
+            
+            if (this.popup != null)
+            {
+                PopUpManager.removePopUp(this.popup);
+                this.popup = null;
+            }
             
             // Initialize the grid and create the game view
-            grid = new Grid(20, 15, 40);
+            // TODO : Implement game difficulties (predefined, then add custom)
+            grid = new Grid(20, 20, 40);
             gameScreen = new GameView(grid);
             this.addChild(gameScreen);
+
+            this.addEventListener(GameEvent.NODE_EVENT, onNodeEvent);
         }
         
         private function onChangeScreen(event:NavigationEvent):void
         {
-            // Handles every event that should change screen (play game, back to main menu ...)
+            trace("Change Screen");
+            // Handles every event that should change screen (play game, back to main menu, replay ...)
             switch (event._params.id)
             {
                 case "play":
@@ -63,10 +83,20 @@ package controllers {
         {
             switch (event._params.id)
             {
-                case "click":
-                    //trace(nodeBtn);
-                    //nodeBtn.label = nodeBtn.getNode().getNeighborBombsCount().toString();
-                    trace("Node Clicked");
+                case "flagSet":
+                    // TODO : Update remaining bombs count
+                    // trace("flagClick");
+                    break;
+                case "cueNodeRevealed":
+                    // TODO : Check if win all cueNodes are revealed
+                    // trace("cueClick");
+                    break;
+                case "bombNodeRevealed":
+                    var gameOverScreen:Sprite = new GameOverPopup();
+                    PopUpManager.addPopUp(gameOverScreen);
+                    this.popup = gameOverScreen;
+                    gameOverScreen.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
+                    trace("popup Added");
                     break;
             }
         }
