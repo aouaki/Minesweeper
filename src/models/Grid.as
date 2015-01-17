@@ -7,11 +7,13 @@ package models
         private var _rowNb:int;
         private var _colNb:int;
         private var _nodeList:Array = [];
+        private var _bombNb:int;
         
         public function Grid(rowNb:int, colNb:int, bombNb:int) 
         {
             this._rowNb = rowNb;
             this._colNb = colNb;
+            this._bombNb = bombNb;
             for (var x:int = 0; x < colNb; x++ )
             {
                 for (var y:int = 0; y < rowNb; y++ )
@@ -59,6 +61,11 @@ package models
         public function getColNb():int
         {
             return this._colNb;
+        }
+        
+        public function getBombNb():int
+        {
+            return this._bombNb;
         }
         
         public function getNode(x:int, y:int):Node
