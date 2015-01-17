@@ -8,42 +8,58 @@ package models
 		public static const STATE_MARKED:String = "marked";
 		public static const STATE_REVEALED:String = "revealed";
 		
-		private var x:int;
-		private var y:int;
-		private var isBomb:Boolean;
-		private var state:String;
-		private var grid:Grid;
+		private var _x:int;
+		private var _y:int;
+		private var _isBomb:Boolean;
+		private var _state:String;
+		private var _grid:Grid;
 		
-		public function Node(_x:int, _y:int, _isBomb:Boolean, _grid:Grid)
+		public function Node(x:int, y:int, isBomb:Boolean, grid:Grid)
 		{
-			this.x = _x;
-			this.y = _y;
-			this.isBomb = _isBomb;
-			this.state = STATE_HIDDEN;
-			this.grid = _grid;
+			this._x = x;
+			this._y = y;
+			this._isBomb = isBomb;
+			this._state = STATE_HIDDEN;
+			this._grid = grid;
 		}
 		
 		public function getX():int
 		{
-			return this.x;
+			return this._x;
 		}
 		
 		public function getY():int
 		{
-			return this.y;
+			return this._y;
 		}
 		
+		public function getGrid():Grid
+		{
+			return this._grid;
+		}
+		
+		public function isBomb():Boolean
+		{
+			return this._isBomb;
+		}
+		
+		public function setBomb(bool:Boolean):void
+		{
+			this._isBomb = bool;
+		}
 		public function getNeighborBombsCount():int
 		{
 			var bombsCount:int = 0;
 			var neighbor:Node;
-			var neighborsCoordinates:Array = [ [this.x + 1, this.y], [this.x - 1, this.y], [this.x, this.y + 1], [this.x, this.y - 1] ];
+			var x:int = this.getX();
+			var y:int = this.getY();
+			var neighborsCoordinates:Array = [ [x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1] ];
 			for ( var index:int = 0; index < neighborsCoordinates.length; index ++)
 			{
-				neighbor = this.grid.getNode(neighborsCoordinates[index][0], neighborsCoordinates[index][1])
+				neighbor = this.getGrid().getNode(neighborsCoordinates[index][0], neighborsCoordinates[index][1])
 				if (neighbor != null)
 				{					
-					if (neighbor.isBomb)
+					if (neighbor.isBomb())
 					{
 						bombsCount += 1;
 					}

@@ -1,46 +1,50 @@
 package models 
 {
+	import flash.geom.Point;
 	public class Grid
 	// A grid is ~ a list of nodes (which contain their own positions)
 	{
-		private var rowNb:int;
-		private var colNb:int;
-		private var nodeList:Array = [];
+		private var _rowNb:int;
+		private var _colNb:int;
+		private var _nodeList:Array = [];
 		
-		public function Grid(_rowNb:int, _colNb:int, _bombNb:int) 
+		public function Grid(rowNb:int, colNb:int, bombNb:int) 
 		{
-			this.rowNb = _rowNb;
-			this.colNb = _colNb;
-			var bombsPositions:Array = generateBombsPositions(_rowNb, _colNb, _bombNb);
-			trace(bombsPositions.indexOf([0, 0]));
-			for (var x:int = 0; x < _rowNb; x++ )
+			this._rowNb = rowNb;
+			this._colNb = colNb;
+			for (var x:int = 0; x < rowNb; x++ )
 			{
-				for (var y:int = 0; y < _colNb; y++ )
+				for (var y:int = 0; y < colNb; y++ )
 				{
-					if (bombsPositions.indexOf([x, y]) >= 0)
-					{
-						trace ("BOMB");
-					}
-					var node:Node = new Node(x, y, (bombsPositions.indexOf([x, y]) >= 0), this);
-					nodeList.push(node);	
+					var node:Node = new Node(x, y, false, this);
+					this._nodeList.push(node);	
 				}
 			}
-			trace(nodeList);
+			
+			var bombsPositions:Array = generateBombsPositions(rowNb, colNb, bombNb);
+			
+			var bombPoint:Point;
+			for (var index:int = 0; index < bombsPositions.length; index++)
+			{
+				bombPoint = bombsPositions[index];
+				this.getNode(bombPoint.x, bombPoint.y).setBomb(true);
+			}
+			trace(this._nodeList);
 		}
 		
 		private function generateBombsPositions(rowNb:int, colNb:int, bombNb:int):Array
 		{
 			var bombsToGenerate:int = bombNb;
-			var bombsPositions:Array = [[0, 0]];
+			var bombsPositions:Array = [];
 			var pickedX:int;
 			var pickedY:int;
 			while (bombsToGenerate != 0)
 			{
-				pickedX = Math.round(Math.random()*rowNb)
-				pickedY = Math.round(Math.random() * colNb)
+				pickedX = Math.round(Math.random() * (rowNb-1))
+				pickedY = Math.round(Math.random() * (colNb-1))
 				if ( bombsPositions.indexOf([pickedX, pickedY]) < 0)
 				{
-					bombsPositions.push([pickedX, pickedY]);
+					bombsPositions.push(new Point(pickedX, pickedY));
 					bombsToGenerate -= 1;
 				}
 			}
@@ -49,20 +53,20 @@ package models
 		
 		public function getRowNb():int
 		{
-			return this.rowNb;
+			return this._rowNb;
 		}
 		
 		public function getColNb():int
 		{
-			return this.colNb;
+			return this._colNb;
 		}
 		
 		public function getNode(x:int, y:int):Node
 		{
 			var node:Node;
-			for ( var nodeIndex:int = 0; nodeIndex < this.nodeList.length; nodeIndex ++ )
+			for ( var nodeIndex:int = 0; nodeIndex < this._nodeList.length; nodeIndex ++ )
 			{
-				node = this.nodeList[nodeIndex];
+				node = this._nodeList[nodeIndex];
 				if ( x == node.getX() && y == node.getY())
 				{
 					return node;
