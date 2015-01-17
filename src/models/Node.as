@@ -1,5 +1,6 @@
 package models 
 {
+	import flash.geom.Point;
 
 	public class Node
 	// Same class for bombs and clue nodes
@@ -49,14 +50,26 @@ package models
 		}
 		public function getNeighborBombsCount():int
 		{
+			// Returns the amount of bombs on the four neighbor
 			var bombsCount:int = 0;
 			var neighbor:Node;
+			var neighborsCoordinates:Array = [];
 			var x:int = this.getX();
 			var y:int = this.getY();
-			var neighborsCoordinates:Array = [ [x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1] ];
+			
+			for (var i:int = -1; i < 2; i++)
+			{
+				for (var j:int = -1; j < 2; j++)
+				{
+					if (!(i==0 && j==0)) // doesn't count itself
+					{
+						neighborsCoordinates.push(new Point(x + i, y + j));
+					}
+				}
+			}
 			for ( var index:int = 0; index < neighborsCoordinates.length; index ++)
 			{
-				neighbor = this.getGrid().getNode(neighborsCoordinates[index][0], neighborsCoordinates[index][1])
+				neighbor = this.getGrid().getNode(neighborsCoordinates[index].x, neighborsCoordinates[index].y)
 				if (neighbor != null)
 				{					
 					if (neighbor.isBomb())
