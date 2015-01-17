@@ -2,6 +2,7 @@ package ui
 {
     import feathers.controls.ToggleButton;
     import models.Node;
+    import starling.events.Event;
     
     public class NodeButton extends ToggleButton 
     {
@@ -11,6 +12,12 @@ package ui
         {
             super();
             this._node = node;
+        }
+        
+        public function setDown():void
+        {
+            // Necessary for null nodes automatically toggling their neighbors when clicked.
+            this.trigger();
         }
         
         public function getNode():Node
