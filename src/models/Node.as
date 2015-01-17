@@ -3,8 +3,8 @@ package models
     import flash.geom.Point;
 
     public class Node
-    // Same class for bombs and clue nodes
     {
+        // Same class for bombs and clue nodes
         public static const STATE_HIDDEN:String = "hidden";
         public static const STATE_FLAGGED:String = "marked";
         public static const STATE_REVEALED:String = "revealed";

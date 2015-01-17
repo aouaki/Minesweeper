@@ -48,10 +48,11 @@ package views {
                 {
                     var nodeBtn:NodeButton = new NodeButton(this.grid.getNode(x, y));
                     // TODO : Use constants
-                    nodeBtn.width = 25;
-                    nodeBtn.height = 25;
-                    nodeBtn.x = x * 20;
-                    nodeBtn.y = 30 + y * 20;
+                    // Characters are too big for size 20*20
+                    nodeBtn.width = 22;
+                    nodeBtn.height = 22;
+                    nodeBtn.x = x * 22;
+                    nodeBtn.y = 30 + y * 22;
                     nodeBtn.name = x + ";" + y;
                     this.addChild(nodeBtn);
                     nodeBtn.addEventListener(Event.TRIGGERED, onNodeTrigger);
@@ -69,40 +70,44 @@ package views {
             var nodeBtn:NodeButton = event.target as NodeButton;
             if (this.ctrlPressed)
             {
-                flagNode(nodeBtn);
+                flagClick (nodeBtn);
             }
             else
             {
-                clickNode(nodeBtn);
+                revealClick(nodeBtn);
             }
         }
         
-        private function flagNode(nodeBtn:NodeButton):void
+        private function flagClick(nodeBtn:NodeButton):void
         {
             if (nodeBtn.getNode().getState() == Node.STATE_FLAGGED)
             {
+                // Unflag node
                 this.remainingBombs += 1;
                 nodeBtn.getNode().setState(Node.STATE_HIDDEN);
                 nodeBtn.label = "";
             }
             else
             {
+                // Flag node
                 nodeBtn.getNode().setState(Node.STATE_FLAGGED);
                 nodeBtn.label = "F";
                 this.remainingBombs -= 1;
-                var bombCountButton:Button = this.getChildByName("bombCountButton") as Button;
-                bombCountButton.label = this.remainingBombs.toString();
+                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "flagSet" } ));
+
             }
-            this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "flagClick" } ));
+            // update bombCountButton's label
+            var bombCountButton:Button = this.getChildByName("bombCountButton") as Button;
+            bombCountButton.label = this.remainingBombs.toString();
         }
 
-        private function clickNode(nodeBtn:NodeButton):void
+        private function revealClick(nodeBtn:NodeButton):void
         {
             nodeBtn.getNode().setState(Node.STATE_REVEALED);
             if (nodeBtn.getNode().isBomb())
             {
                 nodeBtn.label = "B";
-                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "bombClick" } ));
+                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "bombNodeRevealed" } ));
             }
             else
             {
@@ -112,7 +117,7 @@ package views {
                 {
                     extendNullNode(nodeBtn.getNode());
                 }
-                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "cueClick" } ));
+                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "cueNodeRevealed" } ));
             }
             
             // Once a node is clicked, interactions with it are disabled
@@ -128,9 +133,10 @@ package views {
                 if (neighborBtn.getNode().getState() != Node.STATE_REVEALED)
                 {
                     neighborBtn.setDown();
-                    clickNode(neighborBtn);
+                    revealClick(neighborBtn);
                 }
             }
         }
+
     }
 }
