@@ -1,6 +1,7 @@
-package views {    
+package views {
     import starling.display.Sprite;
     import starling.events.Event;
+    import starling.events.KeyboardEvent;
 
     import ui.NodeButton;
     import feathers.controls.Button;
@@ -11,6 +12,7 @@ package views {
     public class GameView extends Sprite 
     {        
         private var grid:Grid;
+        private var ctrlPressed:Boolean;
         
         public function GameView(_grid:Grid) 
         {
@@ -22,7 +24,9 @@ package views {
         private function onAddedToStage(event:Event):void
         {
             trace("Game screen initialized");
-            trace(this.grid.getRowNb().toString())
+            trace(this.grid.getRowNb().toString());
+            this.addEventListener(KeyboardEvent.KEY_DOWN, updateCtrlKey);
+            this.addEventListener(KeyboardEvent.KEY_UP, updateCtrlKey);
             drawGrid();
         }
         
@@ -39,32 +43,44 @@ package views {
                     nodeBtn.x = x * 20;
                     nodeBtn.y = y * 20;
                     this.addChild(nodeBtn);
-                    nodeBtn.addEventListener(Event.TRIGGERED, onNodeClick)
+                    nodeBtn.addEventListener(Event.TRIGGERED, onNodeClick);
                 }
             }
         }
         
+        private function updateCtrlKey(event:KeyboardEvent):void
+        {
+            this.ctrlPressed = event.ctrlKey;
+        }
+        
         private function onNodeClick(event:Event):void
         {
-            trace("Node clicked");
             var nodeBtn:NodeButton = event.target as NodeButton;
-            
-            if (nodeBtn.getNode().isBomb())
+            if (this.ctrlPressed)
             {
-                // Should fire an event "you loose"
-                nodeBtn.label = "B";
+                trace("Node rightclicked");
+                nodeBtn.label = "F";
+                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "ctrlClick" } ));
             }
             else
             {
-                // Should fire an event "test win"
-                nodeBtn.label = nodeBtn.getNode().getNeighborBombsCount().toString();    
+                trace("Node clicked");
+                if (nodeBtn.getNode().isBomb())
+                {
+                    // Should fire an event "you loose"
+                    nodeBtn.label = "B";
+                }
+                else
+                {
+                    // Should fire an event "test win"
+                    nodeBtn.label = nodeBtn.getNode().getNeighborBombsCount().toString();    
+                }
+                
+                // Once a node is clicked, interactions with it are disabled
+                nodeBtn.removeEventListeners();
+                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "click" } ));
             }
-            
-            // Once a node is clicked, interactions with it are disabled
-            nodeBtn.removeEventListeners();
-            this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, {id: "click"}));
         }
         
     }
-
 }
