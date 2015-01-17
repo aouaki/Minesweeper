@@ -1,4 +1,5 @@
 package views {
+    import models.Node;
     import starling.display.Sprite;
     import starling.events.Event;
     import starling.events.KeyboardEvent;
@@ -24,7 +25,6 @@ package views {
         private function onAddedToStage(event:Event):void
         {
             trace("Game screen initialized");
-            trace(this.grid.getRowNb().toString());
             this.addEventListener(KeyboardEvent.KEY_DOWN, updateCtrlKey);
             this.addEventListener(KeyboardEvent.KEY_UP, updateCtrlKey);
             drawGrid();
@@ -32,9 +32,9 @@ package views {
         
         private function drawGrid():void
         {
-            for (var x:int = 0; x < this.grid.getRowNb(); x++)
+            for (var x:int = 0; x < this.grid.getColNb(); x++)
             {
-                for (var y:int = 0; y < this.grid.getColNb(); y++)
+                for (var y:int = 0; y < this.grid.getRowNb(); y++)
                 {
                     var nodeBtn:NodeButton = new NodeButton(this.grid.getNode(x, y));
                     // TODO : Use constants
@@ -42,8 +42,9 @@ package views {
                     nodeBtn.height = 25;
                     nodeBtn.x = x * 20;
                     nodeBtn.y = y * 20;
+                    nodeBtn.name = x + ";" + y;
                     this.addChild(nodeBtn);
-                    nodeBtn.addEventListener(Event.TRIGGERED, onNodeClick);
+                    nodeBtn.addEventListener(Event.TRIGGERED, onNodeTrigger);
                 }
             }
         }
@@ -53,34 +54,59 @@ package views {
             this.ctrlPressed = event.ctrlKey;
         }
         
-        private function onNodeClick(event:Event):void
+        private function onNodeTrigger(event:Event):void
         {
             var nodeBtn:NodeButton = event.target as NodeButton;
             if (this.ctrlPressed)
             {
-                trace("Node rightclicked");
-                nodeBtn.label = "F";
-                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "ctrlClick" } ));
+                flagNode(nodeBtn);
             }
             else
             {
-                trace("Node clicked");
-                if (nodeBtn.getNode().isBomb())
-                {
-                    // Should fire an event "you loose"
-                    nodeBtn.label = "B";
-                }
-                else
-                {
-                    // Should fire an event "test win"
-                    nodeBtn.label = nodeBtn.getNode().getNeighborBombsCount().toString();    
-                }
-                
-                // Once a node is clicked, interactions with it are disabled
-                nodeBtn.removeEventListeners();
-                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "click" } ));
+                clickNode(nodeBtn);
             }
         }
         
+        private function flagNode(nodeBtn:NodeButton):void
+        {
+            nodeBtn.getNode().setState(Node.STATE_FLAGGED);
+            nodeBtn.label = "F";
+            this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "flagClick" } ));
+        }
+
+        private function clickNode(nodeBtn:NodeButton):void
+        {
+            trace("ClickNode");
+            nodeBtn.getNode().setState(Node.STATE_REVEALED);
+            if (nodeBtn.getNode().isBomb())
+            {
+                // Should fire an event "you loose"
+                nodeBtn.label = "B";
+                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "bombClick" } ));
+            }
+            else
+            {
+                // TODO : Test if win
+                var bombCount:int = nodeBtn.getNode().getNeighborBombsCount();
+                //nodeBtn.label = bombCount == 0 ? "" : bombCount.toString();
+                nodeBtn.label = bombCount.toString();
+                if (bombCount == 0)
+                {
+                    var neighborCoordinates:Array = nodeBtn.getNode().getNeighborsCoordinates();
+                    for (var index:int = 0; index < neighborCoordinates.length; index++)
+                    {
+                        var neighborBtn:NodeButton = this.getChildByName(neighborCoordinates[index].x + ";" + neighborCoordinates[index].y) as NodeButton;
+                        if (neighborBtn.getNode().getState() != Node.STATE_REVEALED)
+                        {
+                            clickNode(neighborBtn);
+                        }
+                    }
+                }
+                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "cueClick" } ));
+            }
+            
+            // Once a node is clicked, interactions with it are disabled
+            nodeBtn.removeEventListeners();
+        }
     }
 }

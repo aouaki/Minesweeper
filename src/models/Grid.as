@@ -12,9 +12,9 @@ package models
         {
             this._rowNb = rowNb;
             this._colNb = colNb;
-            for (var x:int = 0; x < rowNb; x++ )
+            for (var x:int = 0; x < colNb; x++ )
             {
-                for (var y:int = 0; y < colNb; y++ )
+                for (var y:int = 0; y < rowNb; y++ )
                 {
                     var node:Node = new Node(x, y, false, this);
                     this._nodeList.push(node);    
@@ -40,8 +40,8 @@ package models
             var pickedY:int;
             while (bombsToGenerate != 0)
             {
-                pickedX = Math.round(Math.random() * (rowNb-1))
-                pickedY = Math.round(Math.random() * (colNb-1))
+                pickedX = Math.round(Math.random() * (colNb-1))
+                pickedY = Math.round(Math.random() * (rowNb-1))
                 if ( bombsPositions.indexOf([pickedX, pickedY]) < 0)
                 {
                     bombsPositions.push(new Point(pickedX, pickedY));
@@ -67,7 +67,7 @@ package models
             for ( var nodeIndex:int = 0; nodeIndex < this._nodeList.length; nodeIndex ++ )
             {
                 node = this._nodeList[nodeIndex];
-                if ( x == node.getX() && y == node.getY())
+                if (x == node.getX() && y == node.getY())
                 {
                     return node;
                 }

@@ -6,7 +6,7 @@ package models
     // Same class for bombs and clue nodes
     {
         public static const STATE_HIDDEN:String = "hidden";
-        public static const STATE_MARKED:String = "marked";
+        public static const STATE_FLAGGED:String = "marked";
         public static const STATE_REVEALED:String = "revealed";
         
         private var _x:int;
@@ -34,6 +34,17 @@ package models
             return this._y;
         }
         
+        public function getState():String
+        {
+            return this._state;
+        }
+        
+        
+        public function setState(state:String):void
+        {
+            this._state = state;
+        }
+        
         public function getGrid():Grid
         {
             return this._grid;
@@ -53,33 +64,39 @@ package models
             // Returns the amount of bombs on the four neighbor
             var bombsCount:int = 0;
             var neighbor:Node;
-            var neighborsCoordinates:Array = [];
-            var x:int = this.getX();
-            var y:int = this.getY();
+
+            var neighborsCoordinates:Array = this.getNeighborsCoordinates();
             
-            for (var i:int = -1; i < 2; i++)
-            {
-                for (var j:int = -1; j < 2; j++)
-                {
-                    if (!(i==0 && j==0)) // doesn't count itself
-                    {
-                        neighborsCoordinates.push(new Point(x + i, y + j));
-                    }
-                }
-            }
+            
             for ( var index:int = 0; index < neighborsCoordinates.length; index ++)
             {
                 neighbor = this.getGrid().getNode(neighborsCoordinates[index].x, neighborsCoordinates[index].y)
-                if (neighbor != null)
-                {                    
-                    if (neighbor.isBomb())
-                    {
-                        bombsCount += 1;
-                    }
+                if (neighbor.isBomb())
+                {
+                    bombsCount += 1;
                 }
             }
             
             return bombsCount;
+        }
+        
+        public function getNeighborsCoordinates():Array
+        {
+            var neighborsCoordinates:Array = [];
+            var x:int = this.getX();
+            var y:int = this.getY();
+            
+            for (var i:int = Math.max(x - 1, 0); i < Math.min(x + 2, this.getGrid().getColNb()); i++)
+            {
+                for (var j:int = Math.max(y - 1, 0); j < Math.min(y + 2, this.getGrid().getRowNb()); j++ )
+                {
+                    if (!(i==x && j==y)) // doesn't count itself
+                    {
+                        neighborsCoordinates.push(new Point(i, j));
+                    }       
+                }
+            }
+            return neighborsCoordinates;
         }
     }
 
