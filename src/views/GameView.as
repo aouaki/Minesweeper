@@ -32,14 +32,14 @@ package views {
 			{
 				for (var y:int = 0; y < this.grid.getColNb(); y++)
 				{
-					var nodeBtn:NodeButton = new NodeButton(this.grid.getNode(x,y));
+					var nodeBtn:NodeButton = new NodeButton(this.grid.getNode(x, y));
+					// TODO : Use constants
 					nodeBtn.width = 25;
 					nodeBtn.height = 25;
-					nodeBtn.x = x*20;
+					nodeBtn.x = x * 20;
 					nodeBtn.y = y * 20;
 					this.addChild(nodeBtn);
 					nodeBtn.addEventListener(Event.TRIGGERED, onNodeClick)
-					//trace(this.grid.getNode(x, y).getNeighborBombsCount());
 				}
 			}
 		}
@@ -48,14 +48,20 @@ package views {
 		{
 			trace("Node clicked");
 			var nodeBtn:NodeButton = event.target as NodeButton;
+			
 			if (nodeBtn.getNode().isBomb())
 			{
+				// Should fire an event "you loose"
 				nodeBtn.label = "B";
 			}
 			else
 			{
+				// Should fire an event "test win"
 				nodeBtn.label = nodeBtn.getNode().getNeighborBombsCount().toString();	
 			}
+			
+			// Once a node is clicked, interactions with it are disabled
+			nodeBtn.removeEventListeners();
 			this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, {id: "click"}));
 		}
 		
