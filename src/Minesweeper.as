@@ -2,12 +2,13 @@ package
 {
     import flash.display.Sprite;
     import flash.events.Event;
+    import flash.events.MouseEvent;
 
     import starling.core.Starling;
 
     import controllers.GameController;
 
-    [SWF(width="400", height="300", frameRate="60", backgroundColor="0xdddddd")]
+    [SWF(width="440", height="470", frameRate="60", backgroundColor="0xdddddd")]
     public class Minesweeper extends Sprite
     {
         private var _starling:Starling;
@@ -20,6 +21,7 @@ package
         
         private function onAddedToStage(event:Event):void
         {
+            stage.addEventListener(MouseEvent.RIGHT_CLICK, function():void { return; } );
             _starling = new Starling(GameController, stage);
             _starling.antiAliasing = 1;
             _starling.start();
