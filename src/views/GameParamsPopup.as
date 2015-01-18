@@ -11,6 +11,7 @@ package views
 
     public class GameParamsPopup extends Sprite 
     {
+        private var difficultyGroup:ToggleGroup;
         
         public function GameParamsPopup() 
         {
@@ -20,32 +21,29 @@ package views
 
         private function onAddedToStage():void
         {
-            var difficultyGroup:ToggleGroup = new ToggleGroup();
+            difficultyGroup = new ToggleGroup();
  
-            var radio1:Radio = new Radio();
-            radio1.label = "Easy";
-            radio1.name = Constants.EASY_NAME;
-            radio1.y = -50;
-            radio1.toggleGroup = difficultyGroup;
-            this.addChild( radio1 );
+            var radio_easy:Radio = new Radio();
+            radio_easy.label = "Easy";
+            radio_easy.y = 50;
+            radio_easy.toggleGroup = difficultyGroup;
+            this.addChild(radio_easy);
              
-            var radio2:Radio = new Radio();
-            radio2.label = "Intermediate";
-            radio1.name = Constants.INTERMEDIATE_NAME;
-            radio2.y = 0;
-            radio2.toggleGroup = difficultyGroup;
-            this.addChild( radio2 );
+            var radio_intermediate:Radio = new Radio();
+            radio_intermediate.label = "Intermediate";
+            radio_intermediate.y = 100;
+            radio_intermediate.toggleGroup = difficultyGroup;
+            this.addChild(radio_intermediate);
              
-            var radio3:Radio = new Radio();
-            radio3.label = "Hard";
-            radio1.name = Constants.HARD_NAME;
-            radio3.y = 50;
-            radio3.toggleGroup = difficultyGroup;
-            this.addChild( radio3 );
+            var radio_hard:Radio = new Radio();
+            radio_hard.label = "Hard";
+            radio_hard.y = 150;
+            radio_hard.toggleGroup = difficultyGroup;
+            this.addChild(radio_hard);
             
             var goBtn:Button = new Button();
             goBtn.label = "Go !";
-            goBtn.y = 100;
+            goBtn.y = 200;
             this.addChild(goBtn);
             
             goBtn.addEventListener(Event.TRIGGERED, onGoClick);
@@ -54,7 +52,7 @@ package views
         private function onGoClick(event:Event):void
         {
             trace("GoClick");
-            this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, {id: "play"}));
+            this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, {id: "play", difficulty: this.difficultyGroup.selectedIndex}));
         }
     }
 
