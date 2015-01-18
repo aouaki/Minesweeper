@@ -99,16 +99,20 @@ package controllers {
         
         private function onNodeEvent(event:GameEvent):void
         {
+            var gameOverScreen:Sprite;
             switch (event.getParams().id)
             {
-                case "flagSet":
-                    // TODO : Check if win all bombs and only bombs are flagged
-                    break;
                 case "cueNodeRevealed":
-                    // TODO : Check if win all cueNodes are revealed
+                    if (this.grid.checkAllNodesRevealed())
+                    {
+                        gameOverScreen = new GameOverPopup(Constants.WIN);
+                        PopUpManager.addPopUp(gameOverScreen);
+                        this.popups.push(gameOverScreen);
+                        gameOverScreen.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
+                    }
                     break;
                 case "bombNodeRevealed":
-                    var gameOverScreen:Sprite = new GameOverPopup();
+                    gameOverScreen = new GameOverPopup(Constants.LOOSE);
                     PopUpManager.addPopUp(gameOverScreen);
                     this.popups.push(gameOverScreen);
                     gameOverScreen.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);

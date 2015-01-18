@@ -12,9 +12,11 @@ package views
         private var gameOverBtn:Button;
         private var replayBtn:Button;
         private var exitBtn:Button;
-        public function GameOverPopup() 
+        private var _text:String;
+        public function GameOverPopup(text:String) 
         {
             super();
+            this._text = text
             this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
         }
 
@@ -28,7 +30,7 @@ package views
         private function drawGameOverScreen():void
         {
             gameOverBtn = new Button();
-            gameOverBtn.label = "Game Over !"
+            gameOverBtn.label = this._text;
             this.addChild(gameOverBtn);
             
             replayBtn = new Button();

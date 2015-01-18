@@ -17,5 +17,7 @@ package
         
         public static const NODE_DIMENSION:int = 22;
         
+        public static const LOOSE:String = "You lose !";
+        public static const WIN:String = "You win !";
     }
 }
