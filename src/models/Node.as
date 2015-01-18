@@ -5,14 +5,9 @@ package models
     public class Node
     {
         // Same class for bombs and clue nodes
-        public static const STATE_HIDDEN:String = "hidden";
-        public static const STATE_FLAGGED:String = "marked";
-        public static const STATE_REVEALED:String = "revealed";
-        
         private var _x:int;
         private var _y:int;
         private var _isBomb:Boolean;
-        private var _state:String;
         private var _grid:Grid;
         
         public function Node(x:int, y:int, isBomb:Boolean, grid:Grid)
@@ -20,7 +15,6 @@ package models
             this._x = x;
             this._y = y;
             this._isBomb = isBomb;
-            this._state = STATE_HIDDEN;
             this._grid = grid;
         }
         
@@ -32,17 +26,6 @@ package models
         public function getY():int
         {
             return this._y;
-        }
-        
-        public function getState():String
-        {
-            return this._state;
-        }
-        
-        
-        public function setState(state:String):void
-        {
-            this._state = state;
         }
         
         public function getGrid():Grid
