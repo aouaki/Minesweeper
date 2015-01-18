@@ -94,8 +94,6 @@ package views {
                 nodeBtn.getNode().setState(Node.STATE_FLAGGED);
                 nodeBtn.label = "F";
                 this.remainingBombs -= 1;
-                this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "flagSet" } ));
-
             }
             // update bombCountButton's label
             var bombCountButton:Button = this.getChildByName("bombCountButton") as Button;
@@ -108,8 +106,7 @@ package views {
             {
                 if (nodeBtn.getNode().isBomb())
                 {
-                    nodeBtn.getNode().setState(Node.STATE_BOOM);
-                    nodeBtn.label = "B";
+                    revealAllBombs();
                     this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "bombNodeRevealed" } ));
                 }
                 else
@@ -131,6 +128,18 @@ package views {
             if (bombCount == 0)
             {
                 extendNullNode(nodeBtn.getNode());
+            }
+        }
+        
+        private function revealAllBombs():void
+        {
+            var bombBtn:NodeButton 
+            var bombPositions:Array = this.grid.getBombsPos();
+            for (var bombIndex:int = 0; bombIndex < bombPositions.length; bombIndex++)
+            {
+                bombBtn = this.getChildByName(bombPositions[bombIndex].x + ";" + bombPositions[bombIndex].y) as NodeButton;
+                bombBtn.getNode().setState(Node.STATE_BOOM);
+                bombBtn.label = "B";
             }
         }
         

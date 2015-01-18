@@ -8,6 +8,7 @@ package models
         private var _colNb:int;
         private var _nodeList:Array = [];
         private var _bombNb:int;
+        private var _bombsPositions:Array;
         
         public function Grid(rowNb:int, colNb:int, bombNb:int) 
         {
@@ -23,12 +24,12 @@ package models
                 }
             }
             
-            var bombsPositions:Array = generateBombsPositions(rowNb, colNb, bombNb);
+            this._bombsPositions = generateBombsPositions(rowNb, colNb, bombNb);
             
             var bombPoint:Point;
-            for (var index:int = 0; index < bombsPositions.length; index++)
+            for (var index:int = 0; index < this._bombsPositions.length; index++)
             {
-                bombPoint = bombsPositions[index];
+                bombPoint = this._bombsPositions[index];
                 this.getNode(bombPoint.x, bombPoint.y).setBomb(true);
             }
         }
@@ -66,7 +67,12 @@ package models
         {
             return this._bombNb;
         }
-        
+
+        public function getBombsPos():Array
+        {
+            return this._bombsPositions;
+        }
+
         public function getNode(x:int, y:int):Node
         {
             var node:Node;
@@ -78,9 +84,24 @@ package models
                     return node;
                 }
             }
-            
+
             return null;
         }
+
+        public function checkAllNodesRevealed():Boolean
+        {
+            var node:Node;
+            for (var index:int = 0;  index < this._nodeList.length; index++)
+            {
+                node = _nodeList[index];
+                if (node.getState() == Node.STATE_HIDDEN && !node.isBomb())
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
     }
 
 }
