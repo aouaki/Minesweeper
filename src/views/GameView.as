@@ -108,12 +108,13 @@ package views {
                 this.remainingBombs += 1;
                 nodeBtn.getNode().setState(Node.STATE_HIDDEN);
                 nodeBtn.label = "";
+                nodeBtn.updateSkin("untoggled");
             }
             else
             {
                 // Flag node
                 nodeBtn.getNode().setState(Node.STATE_FLAGGED);
-                nodeBtn.label = "F";
+                nodeBtn.updateSkin("flag");
                 this.remainingBombs -= 1;
             }
             // update bombCountButton's label
@@ -164,7 +165,7 @@ package views {
             {
                 bombBtn = this.getChildByName(bombPositions[bombIndex].x + ";" + bombPositions[bombIndex].y) as NodeButton;
                 bombBtn.getNode().setState(Node.STATE_BOOM);
-                bombBtn.label = "B";
+                bombBtn.updateSkin("bomb");
             }
         }
         
@@ -176,6 +177,7 @@ package views {
                 var neighborBtn:NodeButton = this.getChildByName(neighborPoint.x + ";" + neighborPoint.y) as NodeButton;
                 if (neighborBtn.getNode().getState() != Node.STATE_REVEALED)
                 {
+                    neighborBtn.updateSkin("untoggled");
                     neighborBtn.setDown();
                     revealNode(neighborBtn);
                 }
