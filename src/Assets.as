@@ -9,6 +9,10 @@ package
     {
         [Embed(source="../assets/images/home-bg.png")]
         public static const HomeBg:Class;
+        [Embed(source="../assets/images/bomb-icon.png")]
+        public static const BombIcon:Class;
+        [Embed(source="../assets/images/flag-icon.png")]
+        public static const FlagIcon:Class;
         
         public static var gameTextures:Dictionary = new Dictionary();
         
