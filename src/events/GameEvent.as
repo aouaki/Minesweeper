@@ -11,7 +11,11 @@ package events
             super(type, bubbles, data);
             this._params = params;
         }
-        
+
+        public function getParams():Object
+        {
+            return this._params;
+        }
     }
 
 }
