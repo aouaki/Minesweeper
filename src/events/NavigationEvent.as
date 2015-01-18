@@ -5,11 +5,16 @@ package events
     public class NavigationEvent extends Event 
     {
         public static const CHANGE_SCREEN:String = "changeScreen";
-        public var _params:Object;
+        private var _params:Object;
         public function NavigationEvent(type:String, bubbles:Boolean=false, params:Object=null) 
         {
-            super(type, bubbles, data);
+            super(type, bubbles, params);
             this._params = params;
+        }
+        
+        public function getParams():Object
+        {
+            return this._params;
         }
         
     }
