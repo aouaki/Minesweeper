@@ -1,10 +1,13 @@
 package views {
+    import events.NavigationEvent;
+    import feathers.controls.Header;
     import feathers.events.FeathersEventType;
     import flash.geom.Point;
     import models.Node;
     import starling.display.Sprite;
     import starling.events.Event;
     import starling.events.KeyboardEvent;
+    import starling.display.DisplayObject;
 
     import feathers.controls.Button;
     import ui.NodeButton;
@@ -14,14 +17,15 @@ package views {
 
     public class GameView extends Sprite 
     {        
-        private var grid:Grid;
+        private var _grid:Grid;
         private var ctrlPressed:Boolean;
         private var remainingBombs:int;
-        
-        public function GameView(_grid:Grid) 
+        private var gameDifficulty:int;
+        public function GameView(grid:Grid, difficulty:int) 
         {
             super();
-            this.grid = _grid;
+            this._grid = grid;
+            this.gameDifficulty = difficulty;
             this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
         }
         
@@ -30,11 +34,23 @@ package views {
             trace("Game screen initialized");
             drawGrid();
             
-            this.remainingBombs = this.grid.getBombNb();
+            var header:Header = new Header();
+            header.width = Constants.GameWidth;
+            header.title = Constants.DIFFICULTY_NAME[this.gameDifficulty] + " Game";
+            this.addChild( header );
+            
+            var homeBtn:Button = new Button();
+            homeBtn.label = "Back to Main Menu";
+            homeBtn.addEventListener(Event.TRIGGERED, onHomeBtnTriggered); 
+            header.leftItems = new <DisplayObject>[homeBtn];
+            
+            this.remainingBombs = this._grid.getBombNb();
             var bombCountButton:Button = new Button();
-            bombCountButton.label = this.remainingBombs.toString();
+            bombCountButton.label = "Remaining bombs: " + this.remainingBombs.toString();
             bombCountButton.name = "bombCountButton";
-            this.addChild(bombCountButton);
+            bombCountButton.removeEventListeners();
+            header.rightItems = new <DisplayObject> [bombCountButton];
+            header.name = "gameHeader";
 
             this.addEventListener(KeyboardEvent.KEY_DOWN, updateCtrlKey);
             this.addEventListener(KeyboardEvent.KEY_UP, updateCtrlKey);
@@ -42,14 +58,14 @@ package views {
         
         private function drawGrid():void
         {
-            var gridWidth:int = this.grid.getColNb() * Constants.NODE_DIMENSION;
+            var gridWidth:int = this._grid.getColNb() * Constants.NODE_DIMENSION;
             var startX:Number = (Constants.GameWidth - gridWidth) / 2;
             var startY:Number = 30;
-            for (var col:int = 0; col < this.grid.getColNb(); col++)
+            for (var col:int = 0; col < this._grid.getColNb(); col++)
             {
-                for (var row:int = 0; row < this.grid.getRowNb(); row++)
+                for (var row:int = 0; row < this._grid.getRowNb(); row++)
                 {
-                    var nodeBtn:NodeButton = new NodeButton(this.grid.getNode(col, row));
+                    var nodeBtn:NodeButton = new NodeButton(this._grid.getNode(col, row));
                     nodeBtn.width = Constants.NODE_DIMENSION;
                     nodeBtn.height = Constants.NODE_DIMENSION;
                     nodeBtn.x = startX + col * Constants.NODE_DIMENSION;
@@ -61,6 +77,11 @@ package views {
             }
         }
         
+        private function onHomeBtnTriggered(event:Event):void
+        {
+            this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, { id: "home" } ));
+        }
+
         private function updateCtrlKey(event:KeyboardEvent):void
         {
             this.ctrlPressed = event.ctrlKey;
@@ -96,8 +117,12 @@ package views {
                 this.remainingBombs -= 1;
             }
             // update bombCountButton's label
-            var bombCountButton:Button = this.getChildByName("bombCountButton") as Button;
-            bombCountButton.label = this.remainingBombs.toString();
+            var header:Header = this.getChildByName("gameHeader") as Header;
+            var bombCountButton:Button = header.rightItems[0] as Button;
+            bombCountButton.label = "Remaining bombs: " + this.remainingBombs.toString();
+            // Strange that we need to do this... Label does not update otherwise
+            header.rightItems = new <DisplayObject> [bombCountButton];
+
         }
 
         private function revealClick(nodeBtn:NodeButton):void
@@ -134,7 +159,7 @@ package views {
         private function revealAllBombs():void
         {
             var bombBtn:NodeButton 
-            var bombPositions:Array = this.grid.getBombsPos();
+            var bombPositions:Array = this._grid.getBombsPos();
             for (var bombIndex:int = 0; bombIndex < bombPositions.length; bombIndex++)
             {
                 bombBtn = this.getChildByName(bombPositions[bombIndex].x + ";" + bombPositions[bombIndex].y) as NodeButton;

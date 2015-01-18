@@ -35,8 +35,8 @@ package views {
             this.addChild(background);
             
             var header:Header = new Header();
+            header.width = Constants.GameWidth;
             header.title = "Minesweeper";
-            header.x = (Constants.GameWidth + header.width) / 2
             this.addChild( header );
             
             var newGameBtn:Button = new Button();

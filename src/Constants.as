@@ -12,6 +12,7 @@ package
         public static const EASY_INDEX:int = 0;
         public static const INTERMEDIATE_INDEX:int = 1;
         public static const HARD_INDEX:int = 2;
+        public static const DIFFICULTY_NAME:Array = ["Easy", "Intermediate", "Hard"];
         
         public static const DIMENSIONS:Array = [[10, 10, 10], [20, 20, 50], [30, 30, 150]];
         

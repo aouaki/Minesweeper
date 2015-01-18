@@ -36,7 +36,18 @@ package controllers {
             new MinimalDesktopTheme();
             trace("Game initialized");
             this.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
-            
+            displayHomeScreen();
+        }
+        
+        private function displayHomeScreen():void
+        {
+            for (var index:int = 0; index < this.popups.length; index++)
+            {
+                PopUpManager.removePopUp(this.popups[index])
+            }
+            this.removeChildren();
+
+            this.popups = []
             homeScreen = new HomeView();
             this.addChild(homeScreen);
         }
@@ -48,25 +59,17 @@ package controllers {
                 PopUpManager.removePopUp(this.popups[index])
             }
 
-            this.popups = []
+            this.popups = [];
+            this.removeChildren();
             
             trace("New Game");
-            if (this.homeScreen != null)
-            {
-                this.removeChild(homeScreen);
-            }
-            
-            if (this.gameScreen != null)
-            {
-                this.removeChild(gameScreen);
-            }
             
             var gameDimensions:Array = Constants.DIMENSIONS[difficultyIndex];
         
             // Initialize the grid and create the game view
             
             grid = new Grid(gameDimensions[0], gameDimensions[1], gameDimensions[2]);
-            gameScreen = new GameView(grid);
+            gameScreen = new GameView(grid, difficultyIndex);
             this.addChild(gameScreen);
 
             this.addEventListener(GameEvent.NODE_EVENT, onNodeEvent);
@@ -88,6 +91,9 @@ package controllers {
             var eventParams:Object = event.getParams();
             switch (eventParams.id)
             {
+                case "home":
+                    displayHomeScreen();
+                    break;
                 case "setupParams":
                     gameParametersPopup();
                     break;
