@@ -4,6 +4,7 @@ package views {
     import starling.events.Event;
     import starling.text.TextField;
 
+    import feathers.controls.Header;
     import feathers.controls.Button;
     
     import events.NavigationEvent;
@@ -33,11 +34,15 @@ package views {
             var background:Image = new Image(Assets.getTexture("HomeBg"));
             this.addChild(background);
             
-            var homeTitle:TextField = new TextField(Constants.GameWidth, Constants.GameHeight / 5, "Mine Sweeper", "Verdana", 36, 0x022139);
-            this.addChild(homeTitle);
+            var header:Header = new Header();
+            header.title = "Minesweeper";
+            header.x = (Constants.GameWidth + header.width) / 2
+            this.addChild( header );
             
             var newGameBtn:Button = new Button();
             newGameBtn.label = "Start new game";
+            newGameBtn.x = (Constants.GameWidth + newGameBtn.width) / 2
+            newGameBtn.y = 300;
             this.addChild(newGameBtn);
             
             newGameBtn.addEventListener(Event.TRIGGERED, onNewGameBtnClick);
