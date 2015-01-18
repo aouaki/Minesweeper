@@ -37,21 +37,11 @@ package views
             this.addChild(replayBtn);
             replayBtn.addEventListener(Event.TRIGGERED, onReplayBtnClick);
             
-            exitBtn = new Button();
-            exitBtn.label = "Quit";
-            exitBtn.y = 400;
-            //this.addChild(exitBtn);
-            //exitBtn.addEventListener(Event.TRIGGERED, onExitBtnClick);
         }
         
         private function onReplayBtnClick(event:Event):void
         {
             this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, {id: "setupParams"}));
-        }
-        
-        private function onExitBtnClick(event:Event):void
-        {
-            this.dispatchEvent(new NavigationEvent(NavigationEvent.QUIT_GAME, true, {id: "exit"}));
         }
         
     }

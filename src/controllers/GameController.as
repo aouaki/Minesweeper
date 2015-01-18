@@ -64,9 +64,6 @@ package controllers {
             var gameDimensions:Array = Constants.DIMENSIONS[difficultyIndex];
         
             // Initialize the grid and create the game view
-            trace(gameDimensions[0]);
-            trace(gameDimensions[1]);
-            trace(gameDimensions[2]);
             
             grid = new Grid(gameDimensions[0], gameDimensions[1], gameDimensions[2]);
             gameScreen = new GameView(grid);
@@ -92,7 +89,6 @@ package controllers {
             switch (eventParams.id)
             {
                 case "setupParams":
-                    trace(this.popups[0])
                     gameParametersPopup();
                     break;
                 case "play":

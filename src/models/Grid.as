@@ -31,7 +31,6 @@ package models
                 bombPoint = bombsPositions[index];
                 this.getNode(bombPoint.x, bombPoint.y).setBomb(true);
             }
-            trace(this._nodeList);
         }
         
         private function generateBombsPositions(rowNb:int, colNb:int, bombNb:int):Array
