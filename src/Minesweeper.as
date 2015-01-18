@@ -8,7 +8,7 @@ package
 
     import controllers.GameController;
 
-    [SWF(width="440", height="470", frameRate="60", backgroundColor="0xdddddd")]
+    [SWF(width="700", height="750", frameRate="60", backgroundColor="0xdddddd")]
     public class Minesweeper extends Sprite
     {
         private var _starling:Starling;
