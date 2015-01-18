@@ -9,6 +9,7 @@ package controllers {
     import views.GameView;
     import views.HomeView;
     import views.GameOverPopup;
+    import views.GameParamsPopup;
     
     import starling.display.Sprite;
     import starling.events.Event;
@@ -20,7 +21,7 @@ package controllers {
         private var gameScreen:GameView;
         private var homeScreen:HomeView;
         private var grid:Grid;
-        private var popup:DisplayObject;
+        private var popups:Array = [];
         
         
         public function GameController() 
@@ -41,6 +42,13 @@ package controllers {
         
         private function newGame():void
         {
+            for (var index:int = 0; index < this.popups.length; index++)
+            {
+                PopUpManager.removePopUp(this.popups[index])
+            }
+
+            this.popups = []
+            
             trace("New Game");
             if (this.homeScreen != null)
             {
@@ -52,12 +60,6 @@ package controllers {
                 this.removeChild(gameScreen);
             }
             
-            if (this.popup != null)
-            {
-                PopUpManager.removePopUp(this.popup);
-                this.popup = null;
-            }
-            
             // Initialize the grid and create the game view
             // TODO : Implement game difficulties (predefined, then add custom)
             grid = new Grid(20, 20, 40);
@@ -67,12 +69,24 @@ package controllers {
             this.addEventListener(GameEvent.NODE_EVENT, onNodeEvent);
         }
         
+        private function gameParametersPopup():void
+        {
+            var gameParamsScreen:Sprite = new GameParamsPopup();
+            PopUpManager.addPopUp(gameParamsScreen);
+            this.popups.push(gameParamsScreen);
+            gameParamsScreen.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
+
+        }
+        
         private function onChangeScreen(event:NavigationEvent):void
         {
             trace("Change Screen");
             // Handles every event that should change screen (play game, back to main menu, replay ...)
             switch (event._params.id)
             {
+                case "setupParams":
+                    gameParametersPopup();
+                    break;
                 case "play":
                     newGame();
                     break;
@@ -94,7 +108,7 @@ package controllers {
                 case "bombNodeRevealed":
                     var gameOverScreen:Sprite = new GameOverPopup();
                     PopUpManager.addPopUp(gameOverScreen);
-                    this.popup = gameOverScreen;
+                    this.popups.push(gameOverScreen);
                     gameOverScreen.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
                     trace("popup Added");
                     break;

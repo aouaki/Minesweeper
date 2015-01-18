@@ -41,13 +41,12 @@ package views {
             this.addChild(newGameBtn);
             
             newGameBtn.addEventListener(Event.TRIGGERED, onNewGameBtnClick);
-
         }
         
         private function onNewGameBtnClick(event:Event):void
         {
             trace("newGameBtn clicked");
-            this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, {id: "play"}));
+            this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, {id: "setupParams"}));
         }
     }
 
