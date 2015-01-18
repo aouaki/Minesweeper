@@ -11,7 +11,6 @@ package views
         
         private var gameOverBtn:Button;
         private var replayBtn:Button;
-        private var replayList:PickerList;
         private var exitBtn:Button;
         public function GameOverPopup() 
         {
@@ -36,6 +35,7 @@ package views
             replayBtn.label = "New Game";
             replayBtn.y = 300;
             this.addChild(replayBtn);
+            replayBtn.addEventListener(Event.TRIGGERED, onReplayBtnClick);
             
             exitBtn = new Button();
             exitBtn.label = "Quit";
@@ -46,7 +46,7 @@ package views
         
         private function onReplayBtnClick(event:Event):void
         {
-            this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, {id: "play"}));
+            this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, true, {id: "setupParams"}));
         }
         
         private function onExitBtnClick(event:Event):void
