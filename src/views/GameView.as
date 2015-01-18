@@ -108,7 +108,7 @@ package views {
                 this.remainingBombs += 1;
                 nodeBtn.getNode().setState(Node.STATE_HIDDEN);
                 nodeBtn.label = "";
-                nodeBtn.updateSkin("untoggled");
+                nodeBtn.updateSkin("delIcon");
             }
             else
             {
@@ -140,7 +140,10 @@ package views {
                     revealNode(nodeBtn);
                     this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "cueNodeRevealed" } ));
                 }
-                
+            }
+            else
+            {
+                nodeBtn.updateSkin("unrevealed");
             }
         }
         
@@ -149,6 +152,8 @@ package views {
             nodeBtn.getNode().setState(Node.STATE_REVEALED);
             var bombCount:int = nodeBtn.getNode().getNeighborBombsCount();
             nodeBtn.label = bombCount == 0 ? "" : bombCount.toString();
+            nodeBtn.updateSkin("delIcon");
+
             nodeBtn.removeEventListeners();
 
             if (bombCount == 0)
@@ -177,8 +182,7 @@ package views {
                 var neighborBtn:NodeButton = this.getChildByName(neighborPoint.x + ";" + neighborPoint.y) as NodeButton;
                 if (neighborBtn.getNode().getState() != Node.STATE_REVEALED)
                 {
-                    neighborBtn.updateSkin("untoggled");
-                    neighborBtn.setDown();
+                    neighborBtn.isSelected = true;
                     revealNode(neighborBtn);
                 }
             }

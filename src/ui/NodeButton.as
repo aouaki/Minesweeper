@@ -22,12 +22,6 @@ package ui
 
         }
         
-        public function setDown():void
-        {
-            // Necessary for null nodes automatically toggling their neighbors when clicked.
-            this.trigger();
-        }
-        
         public function updateSkin(state:String):void
         {
             switch(state) 
@@ -35,12 +29,18 @@ package ui
                 case "flag":
                     this.defaultIcon = new Image(Assets.getTexture("FlagIcon"));
                     break;
+                case "delIcon":
+                    // In case the node was flagged while revealed
+                    this.defaultIcon = null;
+                    break;
                 case "bomb":
+                    // if you see this icon you're bad
                     this.defaultIcon = new Image(Assets.getTexture("BombIcon"));
                     break;
-                case "untoggled":
-                this.defaultIcon = null;
-                break;
+                case "unrevealed":
+                    // Button not pushed if clicked while flagged
+                    this.isSelected = false;
+                    break;
             }
         }
         
