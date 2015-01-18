@@ -45,7 +45,6 @@ package views {
             var gridWidth:int = this.grid.getColNb() * Constants.NODE_DIMENSION;
             var startX:Number = (Constants.GameWidth - gridWidth) / 2;
             var startY:Number = 30;
-            trace(startX);
             for (var col:int = 0; col < this.grid.getColNb(); col++)
             {
                 for (var row:int = 0; row < this.grid.getRowNb(); row++)
@@ -82,17 +81,17 @@ package views {
         
         private function flagClick(nodeBtn:NodeButton):void
         {
-            if (nodeBtn.getState() == NodeButton.STATE_FLAGGED)
+            if (nodeBtn.getNode().getState() == Node.STATE_FLAGGED)
             {
                 // Unflag node
                 this.remainingBombs += 1;
-                nodeBtn.setState(NodeButton.STATE_HIDDEN);
+                nodeBtn.getNode().setState(Node.STATE_HIDDEN);
                 nodeBtn.label = "";
             }
             else
             {
                 // Flag node
-                nodeBtn.setState(NodeButton.STATE_FLAGGED);
+                nodeBtn.getNode().setState(Node.STATE_FLAGGED);
                 nodeBtn.label = "F";
                 this.remainingBombs -= 1;
                 this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "flagSet" } ));
@@ -105,29 +104,33 @@ package views {
 
         private function revealClick(nodeBtn:NodeButton):void
         {
-            if (nodeBtn.getState() != NodeButton.STATE_FLAGGED)
+            if (nodeBtn.getNode().getState() != Node.STATE_FLAGGED)
             {
                 if (nodeBtn.getNode().isBomb())
                 {
-                    nodeBtn.setState(NodeButton.STATE_BOOM);
+                    nodeBtn.getNode().setState(Node.STATE_BOOM);
                     nodeBtn.label = "B";
                     this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "bombNodeRevealed" } ));
                 }
                 else
                 {
-                    nodeBtn.setState(NodeButton.STATE_REVEALED);
-                    var bombCount:int = nodeBtn.getNode().getNeighborBombsCount();
-                    trace(bombCount.toString());
-                    nodeBtn.label = bombCount == 0 ? "" : bombCount.toString();
-                    if (bombCount == 0)
-                    {
-                        extendNullNode(nodeBtn.getNode());
-                    }
+                    revealNode(nodeBtn);
                     this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "cueNodeRevealed" } ));
                 }
                 
-                // Once a node is clicked, interactions with it are disabled
-                nodeBtn.removeEventListeners();
+            }
+        }
+        
+        private function revealNode(nodeBtn:NodeButton):void
+        {
+            nodeBtn.getNode().setState(Node.STATE_REVEALED);
+            var bombCount:int = nodeBtn.getNode().getNeighborBombsCount();
+            nodeBtn.label = bombCount == 0 ? "" : bombCount.toString();
+            nodeBtn.removeEventListeners();
+
+            if (bombCount == 0)
+            {
+                extendNullNode(nodeBtn.getNode());
             }
         }
         
@@ -137,10 +140,10 @@ package views {
             {
                 var neighborPoint:Point = neighborsArray[index];
                 var neighborBtn:NodeButton = this.getChildByName(neighborPoint.x + ";" + neighborPoint.y) as NodeButton;
-                if (neighborBtn.getState() != NodeButton.STATE_REVEALED)
+                if (neighborBtn.getNode().getState() != Node.STATE_REVEALED)
                 {
                     neighborBtn.setDown();
-                    revealClick(neighborBtn);
+                    revealNode(neighborBtn);
                 }
             }
         }
