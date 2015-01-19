@@ -3,8 +3,8 @@ package models
     import flash.geom.Point;
 
     public class Grid
-    // A grid is ~ a list of nodes (which contain their own positions)
     {
+        // A grid is ~ a list of nodes (which contain their own positions)
         private var _rowNb:int;
         private var _colNb:int;
         private var _nodeList:Array = [];
