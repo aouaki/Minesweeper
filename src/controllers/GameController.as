@@ -23,14 +23,13 @@ package controllers {
         private var homeScreen:HomeView;
         private var grid:Grid;
         private var popups:Array = [];
-        
-        
+
         public function GameController() 
         {
             super();
             this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
         }
-        
+
         private function onAddedToStage(event:Event):void
         {
             new AeonDesktopTheme();
@@ -38,28 +37,29 @@ package controllers {
             this.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
             displayHomeScreen();
         }
-        
-        private function displayHomeScreen():void
+
+        private function cleanPopups():void
         {
             for (var index:int = 0; index < this.popups.length; index++)
             {
                 PopUpManager.removePopUp(this.popups[index])
             }
+            this.popups = [];
+        }
+
+        private function displayHomeScreen():void
+        {
+            this.cleanPopups();
             this.removeChildren();
 
-            this.popups = []
             homeScreen = new HomeView();
             this.addChild(homeScreen);
         }
+
         
         private function newGame(difficultyIndex:int):void
         {
-            for (var index:int = 0; index < this.popups.length; index++)
-            {
-                PopUpManager.removePopUp(this.popups[index])
-            }
-
-            this.popups = [];
+            this.cleanPopups();
             this.removeChildren();
 
             trace("New Game");
