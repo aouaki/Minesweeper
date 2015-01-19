@@ -59,8 +59,10 @@ package views {
         private function drawGrid():void
         {
             var gridWidth:int = this._grid.getColNb() * Constants.NODE_DIMENSION;
+            var gridHeight:int = this._grid.getRowNb() * Constants.NODE_DIMENSION;
             var startX:Number = (Constants.GameWidth - gridWidth) / 2;
-            var startY:Number = 30;
+            // 30 is header's height
+            var startY:Number = (Constants.GameHeight - gridHeight + 30) / 2;
             for (var col:int = 0; col < this._grid.getColNb(); col++)
             {
                 for (var row:int = 0; row < this._grid.getRowNb(); row++)

@@ -61,13 +61,12 @@ package controllers {
 
             this.popups = [];
             this.removeChildren();
-            
+
             trace("New Game");
-            
+
             var gameDimensions:Array = Constants.DIMENSIONS[difficultyIndex];
-        
+
             // Initialize the grid and create the game view
-            
             grid = new Grid(gameDimensions[0], gameDimensions[1], gameDimensions[2]);
             gameScreen = new GameView(grid, difficultyIndex);
             this.addChild(gameScreen);
