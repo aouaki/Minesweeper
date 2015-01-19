@@ -40,11 +40,24 @@ package models
             var bombsPositions:Array = [];
             var pickedX:int;
             var pickedY:int;
+            var bombPoint:Point;
+            var doublon:Boolean;
             while (bombsToGenerate != 0)
             {
-                pickedX = Math.round(Math.random() * (colNb-1))
-                pickedY = Math.round(Math.random() * (rowNb-1))
-                if ( bombsPositions.indexOf([pickedX, pickedY]) < 0)
+                doublon = false;
+                pickedX = Math.round(Math.random() * (colNb - 1));
+                pickedY = Math.round(Math.random() * (rowNb - 1));
+                for (var index:int = 0; index < bombsPositions.length; index++)
+                {
+                    // I hate this, but indexOf wouldn't work with different point objects
+                    bombPoint = bombsPositions[index];
+                    if (pickedX == bombPoint.x && pickedY == bombPoint.y)
+                    {
+                        doublon = true;
+                        continue;
+                    }
+                }
+                if (!doublon)
                 {
                     bombsPositions.push(new Point(pickedX, pickedY));
                     bombsToGenerate -= 1;
