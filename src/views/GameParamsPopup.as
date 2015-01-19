@@ -25,25 +25,29 @@ package views
  
             var radio_easy:Radio = new Radio();
             radio_easy.label = "Easy";
-            radio_easy.y = 50;
+            radio_easy.x = -12;
+            radio_easy.y = 150;
             radio_easy.toggleGroup = difficultyGroup;
             this.addChild(radio_easy);
              
             var radio_intermediate:Radio = new Radio();
             radio_intermediate.label = "Intermediate";
-            radio_intermediate.y = 100;
+            radio_intermediate.x = -12;
+            radio_intermediate.y = 175;
             radio_intermediate.toggleGroup = difficultyGroup;
             this.addChild(radio_intermediate);
              
             var radio_hard:Radio = new Radio();
             radio_hard.label = "Hard";
-            radio_hard.y = 150;
+            radio_hard.x = -12;
+            radio_hard.y = 200;
             radio_hard.toggleGroup = difficultyGroup;
             this.addChild(radio_hard);
             
             var goBtn:Button = new Button();
             goBtn.label = "Go !";
-            goBtn.y = 200;
+            goBtn.x = -12;
+            goBtn.y = 225;
             this.addChild(goBtn);
             
             goBtn.addEventListener(Event.TRIGGERED, onGoClick);

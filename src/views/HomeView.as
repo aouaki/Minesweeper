@@ -41,8 +41,8 @@ package views {
             
             var newGameBtn:Button = new Button();
             newGameBtn.label = "Start new game";
-            newGameBtn.x = (Constants.GameWidth + newGameBtn.width) / 2
-            newGameBtn.y = 300;
+            newGameBtn.x = 315;
+            newGameBtn.y = (Constants.GameHeight - newGameBtn.height + 30) / 2;
             this.addChild(newGameBtn);
             
             newGameBtn.addEventListener(Event.TRIGGERED, onNewGameBtnClick);

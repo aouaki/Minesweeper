@@ -31,11 +31,13 @@ package views
         {
             gameOverBtn = new Button();
             gameOverBtn.label = this._text;
+            gameOverBtn.x = -12;
             this.addChild(gameOverBtn);
             
             replayBtn = new Button();
             replayBtn.label = "New Game";
-            replayBtn.y = 300;
+            replayBtn.x = -12;
+            replayBtn.y = 200;
             this.addChild(replayBtn);
             replayBtn.addEventListener(Event.TRIGGERED, onReplayBtnClick);
             
