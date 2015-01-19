@@ -128,7 +128,6 @@ package views {
             bombCountButton.label = "Remaining bombs: " + this.remainingBombs.toString();
             // Strange that we need to do this... Label does not update otherwise
             header.rightItems = new <DisplayObject> [bombCountButton];
-
         }
 
         private function revealClick(nodeBtn:NodeButton):void
@@ -137,6 +136,7 @@ package views {
             {
                 if (nodeBtn.getNode().isBomb())
                 {
+                    // Player looses. Reveals all bombs.
                     revealAllBombs();
                     this.dispatchEvent(new GameEvent(GameEvent.NODE_EVENT, true, { id: "bombNodeRevealed" } ));
                 }
@@ -148,7 +148,8 @@ package views {
             }
             else
             {
-                nodeBtn.updateSkin("unrevealed");
+                // Button is not pushed if a flag is clicked
+                nodeBtn.updateSkin("untoggle");
             }
         }
         
@@ -158,7 +159,7 @@ package views {
             var bombCount:int = nodeBtn.getNode().getNeighborBombsCount();
             nodeBtn.label = bombCount == 0 ? "" : bombCount.toString();
             nodeBtn.updateSkin("delIcon");
-
+            // Once a node is revealed, it does not need to listen to events
             nodeBtn.removeEventListeners();
 
             if (bombCount == 0)
@@ -180,6 +181,7 @@ package views {
         }
         
         private function extendNullNode(node:Node):void {
+            // reveals all neighbor nodes with no neighbor bomb
             var neighborsArray:Array = node.getNeighborsCoordinates();
             for (var index:int = 0; index < neighborsArray.length; index++)
             {

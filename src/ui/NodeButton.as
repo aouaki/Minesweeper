@@ -37,7 +37,7 @@ package ui
                     // if you see this icon you're bad
                     this.defaultIcon = new Image(Assets.getTexture("BombIcon"));
                     break;
-                case "unrevealed":
+                case "untoggle":
                     // Button not pushed if clicked while flagged
                     this.isSelected = false;
                     break;
