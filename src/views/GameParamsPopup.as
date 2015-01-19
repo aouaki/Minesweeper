@@ -2,7 +2,6 @@ package views
 {
     import starling.events.Event;
     import starling.display.Sprite;
-
     import feathers.controls.Radio;
     import feathers.controls.Button;
     import feathers.core.ToggleGroup;

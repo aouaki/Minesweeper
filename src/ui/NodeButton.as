@@ -1,13 +1,13 @@
 package ui 
 {
-    import feathers.controls.Button;
-    import feathers.controls.ToggleButton;
-    import models.Node;
     import starling.display.Image;
     import starling.display.Quad;
     import starling.events.Event;
+    import feathers.controls.Button;
+    import feathers.controls.ToggleButton;
     
     import events.GameEvent;
+    import models.Node;
     
     public class NodeButton extends ToggleButton 
     {

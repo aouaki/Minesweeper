@@ -1,18 +1,19 @@
 package views {
-    import events.NavigationEvent;
-    import feathers.controls.Header;
-    import feathers.events.FeathersEventType;
+    import flash.events.MouseEvent;
     import flash.geom.Point;
-    import models.Node;
+
     import starling.display.Sprite;
     import starling.events.Event;
     import starling.events.KeyboardEvent;
     import starling.display.DisplayObject;
-
+    import feathers.controls.Header;
+    import feathers.events.FeathersEventType;
     import feathers.controls.Button;
-    import ui.NodeButton;
 
+    import models.Node;
     import models.Grid;
+    import ui.NodeButton;
+    import events.NavigationEvent;
     import events.GameEvent;
 
     public class GameView extends Sprite 
@@ -51,6 +52,8 @@ package views {
             bombCountButton.removeEventListeners();
             header.rightItems = new <DisplayObject> [bombCountButton];
             header.name = "gameHeader";
+            
+            this.addEventListener(MouseEvent.RIGHT_CLICK, function():void { trace("lol"); } );
 
             this.addEventListener(KeyboardEvent.KEY_DOWN, updateCtrlKey);
             this.addEventListener(KeyboardEvent.KEY_UP, updateCtrlKey);

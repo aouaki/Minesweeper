@@ -1,6 +1,7 @@
 package
 {
     import flash.geom.Point;
+
     public class Constants 
     {
         public static const GameWidth:int  = 700;
