@@ -4,7 +4,7 @@ package controllers {
     import starling.events.Event;
     import starling.text.TextField;
 
-    import feathers.themes.MinimalDesktopTheme;
+    import feathers.themes.AeonDesktopTheme;
     import feathers.controls.Button;
     import feathers.core.PopUpManager;
 
@@ -33,7 +33,7 @@ package controllers {
         
         private function onAddedToStage(event:Event):void
         {
-            new MinimalDesktopTheme();
+            new AeonDesktopTheme();
             trace("Game initialized");
             this.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
             displayHomeScreen();

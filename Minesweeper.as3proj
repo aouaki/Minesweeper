@@ -55,7 +55,7 @@
     <element path="lib\starling.swc" />
     <element path="lib\feathers.swc" />
     <element path="theme\swc\MetalWorksMobileTheme.swc" />
-    <element path="lib\MinimalDesktopTheme.swc" />
+    <element path="lib\AeonDesktopTheme.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
