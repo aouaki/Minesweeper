@@ -74,7 +74,7 @@ package controllers {
             this.addEventListener(GameEvent.NODE_EVENT, onNodeEvent);
         }
         
-        private function gameParametersPopup():void
+        private function displayGameParametersPopup():void
         {
             var gameParamsScreen:Sprite = new GameParamsPopup();
             PopUpManager.addPopUp(gameParamsScreen);
@@ -94,7 +94,7 @@ package controllers {
                     displayHomeScreen();
                     break;
                 case "setupParams":
-                    gameParametersPopup();
+                    displayGameParametersPopup();
                     break;
                 case "play":
                     newGame(eventParams.difficulty);
@@ -104,25 +104,27 @@ package controllers {
         
         private function onNodeEvent(event:GameEvent):void
         {
-            var gameOverScreen:Sprite;
             switch (event.getParams().id)
             {
                 case "cueNodeRevealed":
                     if (this.grid.checkAllNodesRevealed())
                     {
-                        gameOverScreen = new GameOverPopup(Constants.WIN);
-                        PopUpManager.addPopUp(gameOverScreen);
-                        this.popups.push(gameOverScreen);
-                        gameOverScreen.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
+                        displayGameOverScreen(Constants.WIN);
                     }
                     break;
                 case "bombNodeRevealed":
-                    gameOverScreen = new GameOverPopup(Constants.LOOSE);
-                    PopUpManager.addPopUp(gameOverScreen);
-                    this.popups.push(gameOverScreen);
-                    gameOverScreen.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
+                    displayGameOverScreen(Constants.LOOSE);
                     break;
             }
+        }
+        
+        private function displayGameOverScreen(text:String):void
+        {
+            var gameOverScreen:Sprite = new GameOverPopup(text);
+            PopUpManager.addPopUp(gameOverScreen);
+            this.popups.push(gameOverScreen);
+            gameOverScreen.addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
+            
         }
     }
 
